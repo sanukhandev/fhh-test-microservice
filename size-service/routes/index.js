@@ -12,13 +12,22 @@ router.get('/', function(req, res, next) {
 router.post('/size', (req, res) => {
   logger.info("Recived request for :", req.body)
   const { length, width, height } = req.body;
-  const size = {
-    length,
-    width,
-    height,
-    voluem: length * width * height
-  };
-  logger.info("Responded back with data", size)
-  res.json(size);
+  let valid = false;
+  valid = !isNaN(length) && !isNaN(width) && !isNaN(height)
+  if(valid) {
+    const size = {
+      length,
+      width,
+      height,
+      voluem: length * width * height
+    };
+    logger.info("Responded back with data", size)
+    res.json(size);
+  }else {
+    logger.error("Invalid req object")
+    res.status(500).json({
+      message:"Invalid object"
+    });
+  }
 })
 module.exports = router;

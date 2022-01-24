@@ -7,7 +7,7 @@ const httpUtil = (method, url, data) => {
             url,
             data
         }
-    ) 
+    )
 }
 
 module.exports = httpUtil

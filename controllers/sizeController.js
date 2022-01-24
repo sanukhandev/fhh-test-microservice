@@ -7,14 +7,19 @@ const calculateSize = async(req, res) => {
     const httpPromise = await getSize(items);
     try {
         logger.info("calling all promise concurrently")
-        const sizes = await Promise.all(httpPromise);
-        if(!sizes){
-            logger.error("error getting reponse from promise")
-        }
-        const result = sizes.map((size) => { return size.data});
-        logger.info("responding with sizes:", result)
-        res.json(result);
+        const sizes = await Promise.allSettled(httpPromise);
+        let response = []
+        sizes.forEach(x => {
+            if(x.status === 'rejected'){
+                logger.error("Error in response")
+                response.push({error:"error in response"})
+            } else {
+                response.push(x.value.data)
+            }
+        })
+        res.json(response);
     } catch (error) {
+        console.log(error)
         logger.error("error in controller", error)
         res.json({
             log:error,
