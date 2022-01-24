@@ -19,7 +19,6 @@ const calculateSize = async(req, res) => {
         })
         res.json(response);
     } catch (error) {
-        console.log(error)
         logger.error("error in controller", error)
         res.json({
             log:error,
